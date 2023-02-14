@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">app6</string>
+    <string name="error_imput_empty">Los campos no deben estar vacios</string>
+    <string name="error_not_e_valid_email">Por favor ingrese un correo electronico valido</string>
+    <string name="error_not_e_valid_phone_number">Por favor ingrese un numero de telefono valido</string>
+    <string name="error_incorrectly_repeated_password">La contraseña no coincide</string>
+    <string name="error_invalid_credentials">El correo electronico o la contraseña son incorrectos</string>
+    <string name="success_registration">Usuario nuevo registrado exitosamente</string>
+    <string name="success_login">Inicio de sesion exitoso</string>
+    <string name="error_unknown">Error desconocido</string>
+</resources>
