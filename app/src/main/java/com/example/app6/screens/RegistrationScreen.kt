@@ -1,4 +1,4 @@
-package com.example.app6.presentation.registration
+package com.example.app6.screens
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -29,13 +29,22 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import com.example.app6.navigation.AppScreens
+import com.example.app6.presentation.components.EventDialog
 import com.example.app6.presentation.components.RoundedButton
 import com.example.app6.presentation.components.SocialMediaButton
 import com.example.app6.presentation.components.TransparentTextField
+import com.example.app6.register.RegisterState
 
 
 @Composable
-fun RegistrationScreen(navController: NavHostController) {
+fun RegistrationScreen(
+    navController: NavHostController,
+    state : RegisterState,
+    onRegister : (nameValue : String, emailValue : String, phoneValue : String, passValue : String, confirmPassValue : String) -> Unit,
+    onBack : () -> Unit,
+    onDismissDialog : () -> Unit
+)
+{
     val nameValue = remember{ mutableStateOf("")}
     val emailValue = remember{ mutableStateOf("")}
     val phoneValue = remember{ mutableStateOf("")}
@@ -56,10 +65,12 @@ fun RegistrationScreen(navController: NavHostController) {
         )
         {
             Row(verticalAlignment = Alignment.CenterVertically){
-                IconButton(onClick = {/*TODO */}){
+                IconButton(onClick = {
+                    onBack()
+                }){
                     Icon(
                         modifier = Modifier.clickable {
-                            navController.navigate(route = AppScreens.FirstScreen.route)
+                            navController.navigate(route = AppScreens.Login.route)
                         },
                         imageVector = Icons.Default.ArrowBack,
                         contentDescription = "Regresar a la pantalla principal",
@@ -151,8 +162,15 @@ fun RegistrationScreen(navController: NavHostController) {
                     textLabel = "Confirme su contraseña",
                     keyboardType = KeyboardType.Password,
                     keyboardActions = KeyboardActions(
-                        onNext = {
+                        onDone = {
                             focusManager.clearFocus()
+                            onRegister(
+                                nameValue.value,
+                                emailValue.value,
+                                phoneValue.value,
+                                passValue.value,
+                                confirmPassValue.value
+                            )
                         }
                     ),
                     imeAction = ImeAction.Done,
@@ -182,8 +200,16 @@ fun RegistrationScreen(navController: NavHostController) {
                 Spacer(modifier = Modifier.height(16.dp))
                 RoundedButton(
                     text = "Registrarse",
-                    displayProgressBar = false,
-                    onClick = { /* TODO register */}
+                    displayProgressBar = state.displayProgressBar,
+                    onClick = {
+                        onRegister(
+                            nameValue.value,
+                            emailValue.value,
+                            phoneValue.value,
+                            passValue.value,
+                            confirmPassValue.value
+                        )
+                    }
                 )
                 ClickableText(
                     text = buildAnnotatedString {
@@ -197,7 +223,9 @@ fun RegistrationScreen(navController: NavHostController) {
                             append("Ingresar")
                         }
                     },
-                    onClick = {/* TODO */ }
+                    onClick = {
+                        onBack()
+                    }
                 )
             }
             Spacer(modifier = Modifier.height(16.dp))
@@ -250,6 +278,9 @@ fun RegistrationScreen(navController: NavHostController) {
                     socialMediaColor = MaterialTheme.colors.primary
                 )
             }
+        }
+        if (state.errorMessages != null){
+            EventDialog(errorMessage = state.errorMessages , onDismiss = onDismissDialog)
         }
     }
 }
