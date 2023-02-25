@@ -26,7 +26,7 @@ fun AppNavigation(){
 //            val viewModel = LoginViewModel()
             if (viewModel.state.value.sucessLogin){
                 LaunchedEffect(key1 = Unit){
-                    navController.navigate(AppScreens.Home.route){
+                    navController.navigate(AppScreens.Home.createRoute(viewModel.state.value.email)){
                         popUpTo(AppScreens.Login.route){
                             inclusive = true
                         }
